@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard | Workshop Management{% endblock %}
+
+{% block content %}
+<section class="panel">
+    <h1>Dashboard</h1>
+    <p>Quick links to manage assets, bookings, and inventory.</p>
+    <div class="grid">
+        <a class="card" href="/admin/assets/asset/">Assets</a>
+        <a class="card" href="/admin/bookings/booking/">Bookings</a>
+        <a class="card" href="/admin/inventory/material/">Materials</a>
+        <a class="card" href="/admin/assets/maintenancelog/">Maintenance</a>
+    </div>
+</section>
+{% endblock %}

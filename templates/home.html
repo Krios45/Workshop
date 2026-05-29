@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Home | Workshop Management{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Workshop Management</h1>
+    <p>Manage assets, bookings, inventory, and maintenance in one place.</p>
+    <div class="actions">
+        <a class="button" href="{% url 'dashboard:dashboard' %}">Go to Dashboard</a>
+        <a class="button outline" href="/admin/">Admin Login</a>
+    </div>
+</section>
+{% endblock %}
