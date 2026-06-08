@@ -1,14 +1,55 @@
 {% extends 'base.html' %}
-
-{% block title %}Home | Workshop Management{% endblock %}
-
+{% block title %}Trang chủ | Mini Asset/WMS{% endblock %}
 {% block content %}
-<section class="hero">
-    <h1>Workshop Management</h1>
-    <p>Manage assets, bookings, inventory, and maintenance in one place.</p>
-    <div class="actions">
-        <a class="button" href="{% url 'dashboard:dashboard' %}">Go to Dashboard</a>
-        <a class="button outline" href="/admin/">Admin Login</a>
+<section class="hero-grid reveal">
+    <div class="hero-copy">
+        <p class="eyebrow">Smart Factory 4.0 · Premium SaaS Dashboard</p>
+        <h1>Smart Factory Asset Management</h1>
+        <p class="hero-text">Hệ thống quản lý thiết bị, vật tư và bảo trì nhà xưởng thông minh.</p>
+        <div class="hero-actions">
+            <a class="primary-btn" href="{% url 'accounts:login' %}">Đăng nhập</a>
+            <a class="secondary-btn" href="{% url 'dashboard:dashboard' %}">Xem Dashboard</a>
+        </div>
+        <div class="kpi-row">
+            <div><strong data-count="128">0</strong><span>Tổng thiết bị</span></div>
+            <div><strong data-count="112">0</strong><span>Đang hoạt động</span></div>
+            <div><strong data-count="9">0</strong><span>Bảo trì</span></div>
+            <div><strong data-count="1840">0</strong><span>Vật tư</span></div>
+        </div>
+    </div>
+    <div class="factory-stage glass">
+        <div class="grid-floor"></div>
+        <div class="robot-arm"><span></span></div>
+        <div class="conveyor"><i></i><i></i><i></i></div>
+        <div class="hologram-card">
+            <b>Asset Status</b>
+            <em>87% Utilization</em>
+            <div class="progress"><span style="width:87%"></span></div>
+        </div>
+        <div class="dashboard-preview glass">
+            <div class="mini-chart"></div>
+            <p>Realtime Factory Pulse</p>
+        </div>
+    </div>
+</section>
+
+<section class="section reveal">
+    <div class="section-head"><p class="eyebrow">Core Modules</p><h2>Quản lý tập trung toàn bộ nhà xưởng</h2></div>
+    <div class="feature-grid">
+        <article class="feature-card glass"><span>⚙</span><h3>Quản lý thiết bị</h3><p>Theo dõi mã thiết bị, vị trí, trạng thái và lịch sử vận hành.</p></article>
+        <article class="feature-card glass"><span>📦</span><h3>Quản lý vật tư</h3><p>Kiểm soát tồn kho, cảnh báo sắp hết và giao dịch nhập/xuất.</p></article>
+        <article class="feature-card glass"><span>🛠</span><h3>Lập lịch bảo trì</h3><p>Đặt lịch bảo trì theo mức ưu tiên và người phụ trách.</p></article>
+        <article class="feature-card glass"><span>📊</span><h3>Thống kê thời gian thực</h3><p>KPI, biểu đồ và dữ liệu hoạt động cho quản lý sản xuất.</p></article>
+    </div>
+</section>
+
+<section class="section benefits reveal">
+    <div class="benefit-copy"><p class="eyebrow">Enterprise Benefits</p><h2>Giảm downtime, tăng hiệu suất, quản lý minh bạch.</h2></div>
+    <div class="benefit-list glass">
+        <p>✓ Giảm thời gian dừng máy ngoài kế hoạch</p>
+        <p>✓ Tăng hiệu suất sử dụng thiết bị</p>
+        <p>✓ Quản lý tập trung thiết bị và kho vật tư</p>
+        <p>✓ Theo dõi lịch sử bảo trì theo từng tài sản</p>
     </div>
 </section>
 {% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Nhập/Xuất vật tư | Mini Asset/WMS{% endblock %}
+{% block shell %}<div class="app-shell">{% include 'partials/sidebar.html' %}<main class="workspace">{% include 'partials/topbar.html' %}
+<section class="page-title reveal"><p class="eyebrow">Stock Transaction</p><h1>Trang nhập/xuất vật tư</h1></section>
+{% if success %}<div class="toast success">✓ Giao dịch kho đã được ghi nhận.</div>{% endif %}
+<section class="two-cols reveal">
+<form class="form-card glass" method="post">{% csrf_token %}<h3>Nhập kho</h3><label>Mã vật tư<input name="sku_in" placeholder="LUB-220"></label><label>Số lượng<input type="number" name="qty_in"></label><label>Nhà cung cấp<input name="supplier"></label><label>Ngày nhập<input type="date" name="date_in"></label><button class="primary-btn" type="submit">Lưu nhập kho</button></form>
+<form class="form-card glass" method="post">{% csrf_token %}<h3>Xuất kho</h3><label>Mã vật tư<input name="sku_out" placeholder="BRG-KIT"></label><label>Số lượng<input type="number" name="qty_out"></label><label>Mục đích sử dụng<input name="purpose"></label><label>Thiết bị sử dụng<input name="asset_used"></label><button class="secondary-btn" type="submit">Lưu xuất kho</button></form>
+</section><section class="panel glass reveal"><h3>Transaction History</h3><div class="table-wrap"><table><thead><tr><th>Thời gian</th><th>Loại giao dịch</th><th>Người thực hiện</th></tr></thead><tbody><tr><td>07/06/2026 14:20</td><td><span class="badge cyan">Nhập kho</span></td><td>Admin</td></tr><tr><td>07/06/2026 09:12</td><td><span class="badge orange">Xuất kho</span></td><td>KTV Minh</td></tr></tbody></table></div></section>
+</main></div>{% endblock %}

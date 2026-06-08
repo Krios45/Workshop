@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Chi tiết thiết bị | Mini Asset/WMS{% endblock %}
+{% block shell %}<div class="app-shell">{% include 'partials/sidebar.html' %}<main class="workspace">{% include 'partials/topbar.html' %}
+<section class="detail-hero glass reveal"><div><p class="eyebrow">CNC-AX21</p><h1>Máy CNC Axis Pro</h1><span class="badge cyan">Đang hoạt động</span></div><a class="secondary-btn" href="{% url 'dashboard:maintenance_schedule' %}">Đặt lịch bảo trì</a></section>
+<section class="detail-grid reveal">
+    <div class="panel glass"><h3>Thông tin thiết bị</h3><dl class="info-list"><dt>Loại</dt><dd>CNC Machine</dd><dt>Nhà sản xuất</dt><dd>Futura Industrial</dd><dt>Ngày mua</dt><dd>14/03/2024</dd><dt>Vị trí</dt><dd>Xưởng A · Line 01</dd><dt>Trạng thái</dt><dd>Ổn định</dd></dl></div>
+    <div class="panel glass"><h3>Tổng quan</h3><p>Thiết bị đang vận hành ở mức tải 72%, nhiệt độ ổn định, không phát hiện lỗi nghiêm trọng.</p><div class="progress big"><span style="width:72%"></span></div></div>
+</section>
+<section class="panel glass reveal"><h3>Lịch sử bảo trì</h3><div class="timeline"><article><b>02/06/2026</b><p>Thay dầu trục chính · KTV Minh · Vật tư: LUB-220</p></article><article><b>18/05/2026</b><p>Cân chỉnh spindle · KTV An · Vật tư: Bearing Kit</p></article><article><b>30/04/2026</b><p>Kiểm tra cảm biến an toàn · KTV Long</p></article></div></section>
+<section class="panel glass reveal"><h3>Tài liệu</h3><div class="doc-grid"><span>📄 Manual_CNC_AX21.pdf</span><span>🖼 Hình ảnh thiết bị</span><span>📄 Maintenance_Checklist.pdf</span></div></section>
+</main></div>{% endblock %}

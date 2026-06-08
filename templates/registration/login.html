@@ -1,17 +1,20 @@
 {% extends 'base.html' %}
-
-{% block title %}Login | Workshop Management{% endblock %}
-
+{% block title %}Đăng nhập | Mini Asset/WMS{% endblock %}
 {% block content %}
-<section class="panel">
-	<h1>Login</h1>
-	<form method="post">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<button class="button" type="submit">Login</button>
-	</form>
-	<p>
-		No account? <a href="{% url 'accounts:signup' %}">Sign up</a>
-	</p>
+<section class="login-screen reveal">
+    <div class="login-card glass">
+        <p class="eyebrow">Secure Access</p>
+        <h1>Đăng nhập hệ thống</h1>
+        <p class="muted">Truy cập dashboard quản lý thiết bị, vật tư và bảo trì nhà xưởng.</p>
+        <form method="post" class="login-form">
+            {% csrf_token %}
+            {% if form.errors %}<div class="form-error">Email hoặc mật khẩu chưa đúng. Vui lòng kiểm tra lại.</div>{% endif %}
+            <label>Email / Username{{ form.username }}</label>
+            <label>Password{{ form.password }}</label>
+            <div class="form-row"><label class="remember"><input type="checkbox"> Remember Me</label><a href="#">Quên mật khẩu?</a></div>
+            <button class="primary-btn" type="submit">Đăng nhập</button>
+        </form>
+        <p class="muted">Chưa có tài khoản? <a href="{% url 'accounts:signup' %}">Đăng ký</a></p>
+    </div>
 </section>
 {% endblock %}

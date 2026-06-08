@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}Thống kê | Mini Asset/WMS{% endblock %}
+{% block shell %}<div class="app-shell">{% include 'partials/sidebar.html' %}<main class="workspace">{% include 'partials/topbar.html' %}
+<section class="page-title reveal"><p class="eyebrow">Advanced Analytics</p><h1>Trang thống kê</h1></section>
+<section class="metric-grid reveal"><div class="metric-card glass"><span>Downtime</span><strong>4.2h</strong><em>-18%</em></div><div class="metric-card glass"><span>Maintenance Cost</span><strong>32M</strong><em>VND</em></div><div class="metric-card glass"><span>Inventory Value</span><strong>1.8B</strong><em>VND</em></div><div class="metric-card glass"><span>Asset Utilization</span><strong>87%</strong><em>+6%</em></div></section>
+<section class="chart-grid reveal"><div class="panel glass"><h3>Tỷ lệ hoạt động</h3><canvas id="utilChart"></canvas></div><div class="panel glass"><h3>Tỷ lệ hỏng hóc/bảo trì</h3><canvas id="failureChart"></canvas></div><div class="panel glass"><h3>Mức tồn kho</h3><canvas id="stockLevelChart"></canvas></div><div class="panel glass"><h3>Top vật tư tiêu thụ</h3><canvas id="topMaterialChart"></canvas></div></section>
+</main></div>{% endblock %}
