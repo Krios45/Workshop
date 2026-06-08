@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Danh sách thiết bị | Mini Asset/WMS{% endblock %}
+{% block shell %}<div class="app-shell">{% include 'partials/sidebar.html' %}<main class="workspace">{% include 'partials/topbar.html' %}
+<section class="page-title reveal"><p class="eyebrow">Asset Management</p><h1>Danh sách thiết bị</h1></section>
+<section class="panel glass reveal">
+    <div class="table-tools"><input placeholder="Search thiết bị..."><select><option>Tất cả trạng thái</option><option>Hoạt động</option><option>Bảo trì</option><option>Lỗi</option></select><button class="primary-btn small">+ Thêm thiết bị</button></div>
+    <div class="table-wrap"><table><thead><tr><th>Mã thiết bị</th><th>Tên thiết bị</th><th>Loại</th><th>Khu vực</th><th>Trạng thái</th><th>Ngày bảo trì</th><th>Action</th></tr></thead><tbody>
+        <tr><td>CNC-AX21</td><td>Máy CNC Axis Pro</td><td>CNC Machine</td><td>Xưởng A</td><td><span class="badge cyan">Hoạt động</span></td><td>18/06/2026</td><td><a href="{% url 'dashboard:asset_detail' %}">Xem</a> · Sửa · Xóa</td></tr>
+        <tr><td>RBT-R7</td><td>Robot Arm R7</td><td>Robot Arm</td><td>Dây chuyền 2</td><td><span class="badge orange">Bảo trì</span></td><td>09/06/2026</td><td><a href="{% url 'dashboard:asset_detail' %}">Xem</a> · Sửa · Xóa</td></tr>
+        <tr><td>CV-B2</td><td>Conveyor Belt B2</td><td>Conveyor</td><td>Kho thông minh</td><td><span class="badge blue">Hoạt động</span></td><td>22/06/2026</td><td><a href="{% url 'dashboard:asset_detail' %}">Xem</a> · Sửa · Xóa</td></tr>
+        <tr><td>SEN-IOT9</td><td>IoT Sensor Hub</td><td>Sensor</td><td>Khu QC</td><td><span class="badge red">Lỗi</span></td><td>08/06/2026</td><td><a href="{% url 'dashboard:asset_detail' %}">Xem</a> · Sửa · Xóa</td></tr>
+    </tbody></table></div><div class="pagination"><span>‹</span><b>1</b><span>2</span><span>3</span><span>›</span></div>
+</section></main></div>{% endblock %}

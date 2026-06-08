@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Đặt lịch bảo trì | Mini Asset/WMS{% endblock %}
+{% block shell %}<div class="app-shell">{% include 'partials/sidebar.html' %}<main class="workspace">{% include 'partials/topbar.html' %}
+<section class="page-title reveal"><p class="eyebrow">Maintenance Planner</p><h1>Form đặt lịch bảo trì</h1></section>
+{% if success %}<div class="toast success">✓ Đặt lịch bảo trì thành công.</div>{% endif %}
+<form class="form-card glass reveal" method="post">{% csrf_token %}
+    <label>Thiết bị<select name="asset"><option>CNC-AX21 · Máy CNC Axis Pro</option><option>RBT-R7 · Robot Arm R7</option></select></label>
+    <label>Ngày bảo trì<input type="date" name="date"></label><label>Giờ bảo trì<input type="time" name="time"></label>
+    <label>Người phụ trách<input name="owner" placeholder="Nguyễn Văn A"></label>
+    <label>Mức độ ưu tiên<select name="priority"><option>Thấp</option><option>Trung bình</option><option>Cao</option><option>Khẩn cấp</option></select></label>
+    <label class="full">Ghi chú<textarea name="note" placeholder="Nội dung bảo trì..."></textarea></label>
+    <button class="primary-btn" type="submit">Đặt lịch</button>
+</form></main></div>{% endblock %}
