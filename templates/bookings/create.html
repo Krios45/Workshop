@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Đặt lịch sử dụng | Mini Asset/WMS{% endblock %}
+{% block shell %}
+<div class="app-shell">
+    {% include 'partials/sidebar.html' %}
+    <main class="workspace">
+        {% include 'partials/topbar.html' %}
+
+        <section class="page-title reveal">
+            <p class="eyebrow">Booking Manager</p>
+            <h1>Đăng ký đặt lịch sử dụng thiết bị</h1>
+        </section>
+
+        {% if form.non_field_errors %}
+            <div class="toast error">
+                {{ form.non_field_errors.as_text }}
+            </div>
+        {% endif %}
+
+        <div class="panel glass reveal" style="margin-top: 18px; padding: 24px;">
+            <div style="margin-bottom: 20px;">
+                <h3 style="margin-top: 0; color: var(--cyan);">Thiết bị đã chọn: {{ asset.name }}</h3>
+                <p style="color: var(--g300); margin: 4px 0;">Mã thiết bị: <code>{{ asset.code }}</code></p>
+                <p style="color: var(--g300); margin: 4px 0;">Vị trí hiện tại: {{ asset.location|default:"-" }}</p>
+            </div>
+
+            <form class="form-card" method="post" style="grid-template-columns: 1fr 1fr; gap: 16px;">
+                {% csrf_token %}
+                
+                <input type="hidden" name="asset" value="{{ asset.pk }}">
+
+                <label>
+                    Thời gian bắt đầu
+                    {{ form.start_time }}
+                    {% if form.start_time.errors %}
+                        <span class="form-error" style="font-size: 12px; margin-top: 4px; display: block;">{{ form.start_time.errors.0 }}</span>
+                    {% endif %}
+                </label>
+
+                <label>
+                    Thời gian kết thúc
+                    {{ form.end_time }}
+                    {% if form.end_time.errors %}
+                        <span class="form-error" style="font-size: 12px; margin-top: 4px; display: block;">{{ form.end_time.errors.0 }}</span>
+                    {% endif %}
+                </label>
+
+                <label class="full">
+                    Mục đích sử dụng
+                    {{ form.purpose }}
+                    {% if form.purpose.errors %}
+                        <span class="form-error" style="font-size: 12px; margin-top: 4px; display: block;">{{ form.purpose.errors.0 }}</span>
+                    {% endif %}
+                </label>
+                
+                <div class="full" style="display: flex; gap: 12px; margin-top: 10px;">
+                    <button type="submit" class="primary-btn">Đăng ký đặt lịch</button>
+                    <a href="{% url 'assets:detail' asset.pk %}" class="secondary-btn">Hủy bỏ</a>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+{% endblock %}

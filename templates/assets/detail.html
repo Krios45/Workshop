@@ -1,11 +1,138 @@
 {% extends 'base.html' %}
 {% block title %}Chi tiết thiết bị | Mini Asset/WMS{% endblock %}
-{% block shell %}<div class="app-shell">{% include 'partials/sidebar.html' %}<main class="workspace">{% include 'partials/topbar.html' %}
-<section class="detail-hero glass reveal"><div><p class="eyebrow">CNC-AX21</p><h1>Máy CNC Axis Pro</h1><span class="badge cyan">Đang hoạt động</span></div><a class="secondary-btn" href="{% url 'dashboard:maintenance_schedule' %}">Đặt lịch bảo trì</a></section>
-<section class="detail-grid reveal">
-    <div class="panel glass"><h3>Thông tin thiết bị</h3><dl class="info-list"><dt>Loại</dt><dd>CNC Machine</dd><dt>Nhà sản xuất</dt><dd>Futura Industrial</dd><dt>Ngày mua</dt><dd>14/03/2024</dd><dt>Vị trí</dt><dd>Xưởng A · Line 01</dd><dt>Trạng thái</dt><dd>Ổn định</dd></dl></div>
-    <div class="panel glass"><h3>Tổng quan</h3><p>Thiết bị đang vận hành ở mức tải 72%, nhiệt độ ổn định, không phát hiện lỗi nghiêm trọng.</p><div class="progress big"><span style="width:72%"></span></div></div>
-</section>
-<section class="panel glass reveal"><h3>Lịch sử bảo trì</h3><div class="timeline"><article><b>02/06/2026</b><p>Thay dầu trục chính · KTV Minh · Vật tư: LUB-220</p></article><article><b>18/05/2026</b><p>Cân chỉnh spindle · KTV An · Vật tư: Bearing Kit</p></article><article><b>30/04/2026</b><p>Kiểm tra cảm biến an toàn · KTV Long</p></article></div></section>
-<section class="panel glass reveal"><h3>Tài liệu</h3><div class="doc-grid"><span>📄 Manual_CNC_AX21.pdf</span><span>🖼 Hình ảnh thiết bị</span><span>📄 Maintenance_Checklist.pdf</span></div></section>
-</main></div>{% endblock %}
+{% block shell %}
+<div class="app-shell">
+    {% include 'partials/sidebar.html' %}
+    <main class="workspace">
+        {% include 'partials/topbar.html' %}
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="toast {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <section class="detail-hero glass reveal">
+            <div>
+                <p class="eyebrow">{{ asset.code }}</p>
+                <h1>{{ asset.name }}</h1>
+                {% if asset.status == 'available' %}
+                    <span class="badge cyan">Sẵn sàng</span>
+                {% elif asset.status == 'in_use' %}
+                    <span class="badge blue">Đang dùng</span>
+                {% elif asset.status == 'maintenance' %}
+                    <span class="badge orange">Bảo trì</span>
+                {% else %}
+                    <span class="badge red">Thanh lý</span>
+                {% endif %}
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                {% if asset.status == 'available' %}
+                    <a class="primary-btn" href="{% url 'bookings:create' asset.pk %}">Đặt lịch sử dụng</a>
+                {% endif %}
+                {% if is_manager %}
+                    <a class="secondary-btn" href="{% url 'assets:update' asset.pk %}">Chỉnh sửa</a>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="detail-grid reveal">
+            <div class="panel glass">
+                <h3>Thông tin thiết bị</h3>
+                <dl class="info-list">
+                    <dt>Loại danh mục</dt>
+                    <dd>{{ asset.category.name }}</dd>
+                    <dt>Số Serial</dt>
+                    <dd>{{ asset.serial_number|default:"-" }}</dd>
+                    <dt>Ngày mua</dt>
+                    <dd>{{ asset.purchase_date|date:"d/m/Y"|default:"-" }}</dd>
+                    <dt>Giá mua</dt>
+                    <dd>{% if asset.purchase_cost %}{{ asset.purchase_cost }} VNĐ{% else %}-{% endif %}</dd>
+                    <dt>Vị trí</dt>
+                    <dd>{{ asset.location|default:"-" }}</dd>
+                    <dt>Trạng thái</dt>
+                    <dd>{{ asset.get_status_display }}</dd>
+                </dl>
+            </div>
+            
+            <div class="panel glass">
+                <h3>Tổng quan hình ảnh</h3>
+                {% if asset.image_file %}
+                    <div style="width: 100%; height: 160px; border-radius: 18px; overflow: hidden; background: #0f172a; display: flex; align-items: center; justify-content: center; border: 1px solid var(--line);">
+                        <img src="{{ asset.image_file.url }}" alt="{{ asset.name }}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+                    </div>
+                {% else %}
+                    <div style="width: 100%; height: 160px; border-radius: 18px; background: rgba(255,255,255,0.03); border: 1px dashed var(--line); display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--g500);">
+                        <span>No Image</span>
+                    </div>
+                {% endif %}
+                <div class="progress big" style="margin-top: 18px;"><span style="width:100%"></span></div>
+            </div>
+        </section>
+
+        <section class="panel glass reveal">
+            <h3>Lịch sử bảo trì</h3>
+            <div class="timeline">
+                {% for log in maintenance_logs %}
+                    <article>
+                        <b>{{ log.start_date|date:"d/m/Y" }} {% if log.end_date %} - {{ log.end_date|date:"d/m/Y" }}{% endif %}</b>
+                        <p>
+                            {{ log.description }} 
+                            {% if log.performed_by %} · Phụ trách: {{ log.performed_by.username }}{% endif %}
+                            {% if log.cost %} · Chi phí: {{ log.cost }} VNĐ{% endif %}
+                            <span class="badge {% if log.status == 'completed' %}cyan{% elif log.status == 'scheduled' %}orange{% else %}red{% endif %}" style="font-size: 10px; padding: 2px 8px; margin-left: 10px;">
+                                {{ log.get_status_display }}
+                            </span>
+                        </p>
+                    </article>
+                {% empty %}
+                    <p style="color: var(--g500);">Chưa có lịch sử bảo trì nào cho thiết bị này.</p>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="panel glass reveal">
+            <h3>Lịch sử đặt lịch gần đây</h3>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Người đặt</th>
+                            <th>Thời gian mượn</th>
+                            <th>Mục đích</th>
+                            <th>Trạng thái</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in bookings %}
+                            <tr>
+                                <td>{{ booking.user.username }}</td>
+                                <td>{{ booking.start_time|date:"d/m/Y H:i" }} - {{ booking.end_time|date:"d/m/Y H:i" }}</td>
+                                <td>{{ booking.purpose|default:"-" }}</td>
+                                <td>
+                                    {% if booking.status == 'pending' %}
+                                        <span class="badge orange">Chờ duyệt</span>
+                                    {% elif booking.status == 'approved' %}
+                                        <span class="badge blue">Đã duyệt</span>
+                                    {% elif booking.status == 'completed' %}
+                                        <span class="badge cyan">Đã trả</span>
+                                    {% elif booking.status == 'canceled' %}
+                                        <span class="badge red">Đã hủy</span>
+                                    {% else %}
+                                        <span class="badge red">Từ chối</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="4" style="text-align: center; color: var(--g500);">Chưa có lượt đặt lịch nào.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+{% endblock %}

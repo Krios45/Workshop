@@ -7,21 +7,40 @@
         {% include 'partials/topbar.html' %}
         <section class="page-title reveal"><p class="eyebrow">Operations Center</p><h1>Dashboard nhà xưởng</h1></section>
         <section class="metric-grid reveal">
-            <div class="metric-card glass"><span>Tổng thiết bị</span><strong data-count="128">0</strong><em>+12 tháng này</em></div>
-            <div class="metric-card glass"><span>Thiết bị hoạt động</span><strong data-count="112">0</strong><em>87.5%</em></div>
-            <div class="metric-card glass warning"><span>Thiết bị lỗi</span><strong data-count="7">0</strong><em>Cần xử lý</em></div>
-            <div class="metric-card glass"><span>Lịch bảo trì</span><strong data-count="18">0</strong><em>Tuần này</em></div>
+            <div class="metric-card glass"><span>Tổng thiết bị</span><strong data-count="{{ total_assets }}">0</strong><em>Hệ thống</em></div>
+            <div class="metric-card glass"><span>Đang sẵn sàng</span><strong data-count="{{ active_assets }}">0</strong><em>Sẵn sàng</em></div>
+            <div class="metric-card glass warning"><span>Thiết bị lỗi/bảo trì</span><strong data-count="{{ error_assets }}">0</strong><em>Cần xử lý</em></div>
+            <div class="metric-card glass"><span>Tổng lượt đặt lịch</span><strong data-count="{{ bookings_count }}">0</strong><em>Lịch sử đặt</em></div>
         </section>
         <section class="chart-grid reveal">
             <div class="panel glass"><h3>Asset Status</h3><canvas id="assetStatusChart"></canvas></div>
             <div class="panel glass"><h3>Maintenance Trend</h3><canvas id="maintenanceTrendChart"></canvas></div>
             <div class="panel glass wide"><h3>Inventory Overview</h3><canvas id="inventoryChart"></canvas></div>
         </section>
-        <section class="panel glass reveal"><h3>Recent Activity</h3>
-            <div class="table-wrap"><table><thead><tr><th>Thiết bị</th><th>Hành động</th><th>Thời gian</th></tr></thead><tbody>
-                <tr><td>CNC-AX21</td><td><span class="badge cyan">Bảo trì hoàn tất</span></td><td>10 phút trước</td></tr>
-                <tr><td>Robot Arm R7</td><td><span class="badge orange">Cảnh báo rung</span></td><td>34 phút trước</td></tr>
-                <tr><td>Conveyor B2</td><td><span class="badge blue">Cập nhật vật tư</span></td><td>1 giờ trước</td></tr>
+        <section class="panel glass reveal"><h3>Hoạt động đặt lịch gần đây</h3>
+            <div class="table-wrap"><table><thead><tr><th>Thiết bị</th><th>Người mượn</th><th>Thời gian bắt đầu</th><th>Trạng thái</th></tr></thead><tbody>
+                {% for booking in recent_bookings %}
+                    <tr>
+                        <td>{{ booking.asset.name }} ({{ booking.asset.code }})</td>
+                        <td>{{ booking.user.username }}</td>
+                        <td>{{ booking.start_time|date:"d/m/Y H:i" }}</td>
+                        <td>
+                            {% if booking.status == 'pending' %}
+                                <span class="badge orange">Chờ duyệt</span>
+                            {% elif booking.status == 'approved' %}
+                                <span class="badge blue">Đã duyệt</span>
+                            {% elif booking.status == 'completed' %}
+                                <span class="badge cyan">Đã trả</span>
+                            {% elif booking.status == 'canceled' %}
+                                <span class="badge red">Đã hủy</span>
+                            {% else %}
+                                <span class="badge red">Từ chối</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr><td colspan="4" style="text-align: center; color: var(--g500);">Không có hoạt động nào gần đây.</td></tr>
+                {% endfor %}
             </tbody></table></div>
         </section>
     </main>

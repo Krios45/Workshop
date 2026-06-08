@@ -11,10 +11,10 @@
             <a class="secondary-btn" href="{% url 'dashboard:dashboard' %}">Xem Dashboard</a>
         </div>
         <div class="kpi-row">
-            <div><strong data-count="128">0</strong><span>Tổng thiết bị</span></div>
-            <div><strong data-count="112">0</strong><span>Đang hoạt động</span></div>
-            <div><strong data-count="9">0</strong><span>Bảo trì</span></div>
-            <div><strong data-count="1840">0</strong><span>Vật tư</span></div>
+            <div><strong data-count="{{ total_assets|default:0 }}">0</strong><span>Tổng thiết bị</span></div>
+            <div><strong data-count="{{ active_assets|default:0 }}">0</strong><span>Đang hoạt động</span></div>
+            <div><strong data-count="{{ maintenance_assets|default:0 }}">0</strong><span>Bảo trì</span></div>
+            <div><strong data-count="{{ total_materials|default:0 }}">0</strong><span>Vật tư</span></div>
         </div>
     </div>
     <div class="factory-stage glass">

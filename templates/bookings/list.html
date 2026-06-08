@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}Danh sách đặt lịch | Mini Asset/WMS{% endblock %}
+{% block shell %}
+<div class="app-shell">
+    {% include 'partials/sidebar.html' %}
+    <main class="workspace">
+        {% include 'partials/topbar.html' %}
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="toast {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <section class="page-title reveal">
+            <p class="eyebrow">Booking Management</p>
+            <h1>{% if is_manager %}Danh sách đặt lịch toàn hệ thống{% else %}Danh sách lịch đặt của tôi{% endif %}</h1>
+        </section>
+
+        <section class="panel glass reveal" style="margin-top: 18px;">
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mã thiết bị</th>
+                            <th>Tên thiết bị</th>
+                            <th>Người đặt</th>
+                            <th>Bắt đầu</th>
+                            <th>Kết thúc</th>
+                            <th>Mục đích sử dụng</th>
+                            <th>Trạng thái</th>
+                            <th>Hành động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for booking in bookings %}
+                            <tr>
+                                <td>{{ booking.asset.code }}</td>
+                                <td>{{ booking.asset.name }}</td>
+                                <td>{{ booking.user.username }}</td>
+                                <td>{{ booking.start_time|date:"d/m/Y H:i" }}</td>
+                                <td>{{ booking.end_time|date:"d/m/Y H:i" }}</td>
+                                <td>{{ booking.purpose|default:"-" }}</td>
+                                <td>
+                                    {% if booking.status == 'pending' %}
+                                        <span class="badge orange">Chờ duyệt</span>
+                                    {% elif booking.status == 'approved' %}
+                                        <span class="badge blue">Đã duyệt</span>
+                                    {% elif booking.status == 'completed' %}
+                                        <span class="badge cyan">Đã trả</span>
+                                    {% elif booking.status == 'canceled' %}
+                                        <span class="badge red">Đã hủy</span>
+                                    {% else %}
+                                        <span class="badge red">Từ chối</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div style="display: flex; gap: 8px;">
+                                        {% if is_manager %}
+                                            {% if booking.status == 'pending' %}
+                                                <a href="{% url 'bookings:approve' booking.pk %}" class="primary-btn small" style="padding: 6px 12px; font-size: 12px;">Duyệt</a>
+                                                <a href="{% url 'bookings:reject' booking.pk %}" class="secondary-btn small" style="padding: 6px 12px; font-size: 12px; border-color: rgba(248,113,113,.4); color: #fca5a5;">Từ chối</a>
+                                            {% elif booking.status == 'approved' %}
+                                                <a href="{% url 'bookings:return' booking.pk %}" class="primary-btn small" style="padding: 6px 12px; font-size: 12px;">Xác nhận trả</a>
+                                            {% endif %}
+                                        {% endif %}
+                                        
+                                        {% if booking.status == 'pending' or booking.status == 'approved' %}
+                                            {% if booking.user == request.user or is_manager %}
+                                                <a href="{% url 'bookings:cancel' booking.pk %}" class="ghost-btn small" style="padding: 6px 12px; font-size: 12px;" onclick="return confirm('Bạn có chắc chắn muốn hủy lịch đặt này?');">Hủy đặt</a>
+                                            {% endif %}
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="8" style="text-align: center; color: var(--g500);">Chưa có lịch đặt nào được đăng ký.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</div>
+{% endblock %}
