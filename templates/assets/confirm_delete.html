@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Xóa thiết bị | Mini Asset/WMS{% endblock %}
+{% block shell %}
+<div class="app-shell">
+    {% include 'partials/sidebar.html' %}
+    <main class="workspace">
+        {% include 'partials/topbar.html' %}
+
+        <section class="page-title reveal">
+            <p class="eyebrow">Asset Management</p>
+            <h1>Xác nhận xóa thiết bị</h1>
+        </section>
+
+        <div class="panel glass reveal" style="margin-top: 18px; max-width: 600px;">
+            <h3>Bạn có chắc chắn muốn xóa thiết bị này không?</h3>
+            <p style="color: var(--g300); margin: 16px 0; line-height: 1.6;">
+                Hành động này sẽ xóa vĩnh viễn thiết bị <strong>{{ asset.name }}</strong> (Mã: <code>{{ asset.code }}</code>) khỏi cơ sở dữ liệu hệ thống. Không thể hoàn tác hành động này.
+            </p>
+            <form method="post" style="display: flex; gap: 12px;">
+                {% csrf_token %}
+                <button type="submit" class="primary-btn" style="background: linear-gradient(135deg, #f87171, #ef4444); color: #fff; box-shadow: 0 0 28px rgba(239, 68, 68, 0.4);">Xác nhận xóa</button>
+                <a href="{% url 'assets:detail' asset.pk %}" class="secondary-btn">Hủy bỏ</a>
+            </form>
+        </div>
+    </main>
+</div>
+{% endblock %}

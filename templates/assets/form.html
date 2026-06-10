@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} | Mini Asset/WMS{% endblock %}
+{% block shell %}
+<div class="app-shell">
+    {% include 'partials/sidebar.html' %}
+    <main class="workspace">
+        {% include 'partials/topbar.html' %}
+
+        <section class="page-title reveal">
+            <p class="eyebrow">Asset Management</p>
+            <h1>{{ title }}</h1>
+        </section>
+
+        {% if form.non_field_errors %}
+            <div class="toast error">
+                {{ form.non_field_errors.as_text }}
+            </div>
+        {% endif %}
+
+        <form class="form-card glass reveal" method="post" enctype="multipart/form-data" style="margin-top: 18px;">
+            {% csrf_token %}
+            
+            {% for field in form %}
+                <label class="{% if field.name == 'description' or field.name == 'location' %}full{% endif %}">
+                    {{ field.label }}
+                    {{ field }}
+                    {% if field.errors %}
+                        <span class="form-error" style="font-size: 12px; margin-top: 4px; display: block;">
+                            {{ field.errors.0 }}
+                        </span>
+                    {% endif %}
+                </label>
+            {% endfor %}
+            
+            <div class="full" style="display: flex; gap: 12px; margin-top: 10px;">
+                <button type="submit" class="primary-btn">Lưu thiết bị</button>
+                <a href="{% url 'assets:list' %}" class="secondary-btn">Hủy bỏ</a>
+            </div>
+        </form>
+    </main>
+</div>
+{% endblock %}
