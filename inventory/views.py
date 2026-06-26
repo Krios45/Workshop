@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.views.generic import ListView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.db.models import F
 from .models import Material, StockTransaction
 from .forms import StockTransactionForm
 
-class MaterialListView(ListView):
+class MaterialListView(LoginRequiredMixin, ListView):
     model = Material
     template_name = 'inventory/material_list.html'
     context_object_name = 'materials'
@@ -23,12 +24,12 @@ class MaterialListView(ListView):
             
         return queryset
 
-class TransactionHistoryView(ListView):
+class TransactionHistoryView(LoginRequiredMixin, ListView):
     model = StockTransaction
     template_name = 'inventory/transaction_history.html'
     context_object_name = 'logs'
 
-class CreateTransactionView(CreateView):
+class CreateTransactionView(LoginRequiredMixin, CreateView):
     model = StockTransaction
     form_class = StockTransactionForm
     template_name = 'inventory/log_form.html'
