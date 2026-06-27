@@ -1,5 +1,19 @@
 from django import forms
-from .models import StockTransaction
+from .models import StockTransaction, Material
+
+class MaterialForm(forms.ModelForm):
+    class Meta:
+        model = Material
+        fields = ['code', 'name', 'unit', 'quantity', 'min_quantity', 'location', 'note']
+        widgets = {
+            'code': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'VD: LUB-220'}),
+            'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Tên vật tư'}),
+            'unit': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'VD: Lít, Cái, Bộ'}),
+            'quantity': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
+            'min_quantity': forms.NumberInput(attrs={'class': 'form-control', 'min': 0}),
+            'location': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'VD: Kho A'}),
+            'note': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }
 
 class StockTransactionForm(forms.ModelForm):
     class Meta:
