@@ -1,46 +1,49 @@
 {% extends 'base.html' %}
+{% block title %}Tạo phiếu nhập xuất | Mini Asset/WMS{% endblock %}
+{% block shell %}
+<div class="app-shell">
+    {% include 'partials/sidebar.html' %}
+    <main class="workspace">
+        {% include 'partials/topbar.html' %}
 
-{% block content %}
-<div class="container mt-4" style="max-width: 600px;">
-    <div class="card shadow">
-        <div class="card-header bg-primary text-white">
-            <h4 class="mb-0">Tạo Phiếu Nhập / Xuất Vật Tư</h4>
-        </div>
-        <div class="card-body">
+        <section class="page-title reveal">
+            <p class="eyebrow">Stock Transaction</p>
+            <h1>Tạo phiếu nhập / xuất vật tư</h1>
+        </section>
+
+        <section class="panel glass reveal" style="max-width: 600px;">
             <form method="post">
                 {% csrf_token %}
-                
+
                 {% if form.non_field_errors %}
-                    <div class="alert alert-danger">
-                        {% for error in form.non_field_errors %}
-                            {{ error }}
-                        {% endfor %}
+                    <div class="toast error">
+                        {% for error in form.non_field_errors %}{{ error }}{% endfor %}
                     </div>
                 {% endif %}
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Chọn vật tư:</label>
+                <div class="form-row">
+                    <label>Chọn vật tư</label>
                     {{ form.material }}
                 </div>
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Loại giao dịch:</label>
+                <div class="form-row">
+                    <label>Loại giao dịch</label>
                     {{ form.transaction_type }}
                 </div>
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Số lượng thay đổi:</label>
+                <div class="form-row">
+                    <label>Số lượng thay đổi</label>
                     {{ form.quantity }}
                 </div>
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Ghi chú / Lý do:</label>
+                <div class="form-row">
+                    <label>Ghi chú / Lý do</label>
                     {{ form.note }}
                 </div>
 
-                <div class="d-flex justify-content-between mt-4">
-                    <a href="{% url 'inventory:material_list' %}" class="btn btn-secondary">Quay lại</a>
-                    <button type="submit" class="btn btn-success">Xác nhận thực hiện</button>
+                <div class="table-tools" style="margin-top: 1.5rem;">
+                    <a href="{% url 'inventory:material_list' %}" class="secondary-btn small" style="border-radius: 14px;">Quay lại</a>
+                    <button type="submit" class="primary-btn small">Xác nhận thực hiện</button>
                 </div>
             </form>
-        </div>
-    </div>
+        </section>
+    </main>
 </div>
 {% endblock %}
