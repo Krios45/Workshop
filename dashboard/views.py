@@ -48,17 +48,6 @@ def maintenance_schedule(request):
 
 
 @login_required
-def inventory(request):
-    return render(request, 'inventory/list.html')
-
-
-@login_required
-def stock_transactions(request):
-    context = {'success': request.method == 'POST'}
-    return render(request, 'inventory/transactions.html', context)
-
-
-@login_required
 def analytics(request):
     return render(request, 'analytics.html')
 
