@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-!e(l540c(eop9%^(hd$v0n3%xj8wsnp(j9!tm2a9)hmu98h(3q
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "workshop-1-46kn.onrender.com",
+    ".onrender.com",
     "localhost",
     "127.0.0.1",
 ]
@@ -130,6 +130,10 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://workshop-1-46kn.onrender.com",
+]
 
 LOGIN_REDIRECT_URL = 'dashboard:home'
 LOGOUT_REDIRECT_URL = 'dashboard:home'
