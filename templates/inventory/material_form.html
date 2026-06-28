@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Thêm vật tư | Mini Asset/WMS{% endblock %}
+{% block shell %}
+<div class="app-shell">
+    {% include 'partials/sidebar.html' %}
+    <main class="workspace">
+        {% include 'partials/topbar.html' %}
+
+        <section class="page-title reveal">
+            <p class="eyebrow">Warehouse Management</p>
+            <h1>Thêm vật tư mới</h1>
+        </section>
+
+        {% if form.non_field_errors %}
+            <div class="toast error">{{ form.non_field_errors.as_text }}</div>
+        {% endif %}
+
+        <section class="panel glass reveal" style="max-width: 600px;">
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-row">
+                    <label>{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <span class="form-error" style="font-size: 12px; margin-top: 4px; display: block; color: #f87171;">{{ field.errors.0 }}</span>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <div class="table-tools" style="margin-top: 1.5rem;">
+                    <a href="{% url 'inventory:material_list' %}" class="secondary-btn small" style="border-radius: 14px;">Hủy bỏ</a>
+                    <button type="submit" class="primary-btn small">Lưu vật tư</button>
+                </div>
+            </form>
+        </section>
+    </main>
+</div>
+{% endblock %}

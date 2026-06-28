@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Xóa vật tư | Mini Asset/WMS{% endblock %}
+{% block shell %}
+<div class="app-shell">
+    {% include 'partials/sidebar.html' %}
+    <main class="workspace">
+        {% include 'partials/topbar.html' %}
+
+        <section class="page-title reveal">
+            <p class="eyebrow">Warehouse Management</p>
+            <h1>Xác nhận xóa vật tư</h1>
+        </section>
+
+        <div class="panel glass reveal" style="margin-top: 18px; max-width: 600px;">
+            <h3>Bạn có chắc chắn muốn xóa vật tư này không?</h3>
+            <p style="color: var(--g300); margin: 16px 0; line-height: 1.6;">
+                Hành động này sẽ xóa vĩnh viễn vật tư <strong>{{ material.name }}</strong> (Mã: <code>{{ material.code }}</code>) cùng toàn bộ lịch sử nhập/xuất liên quan. Không thể hoàn tác.
+            </p>
+            <form method="post" style="display: flex; gap: 12px;">
+                {% csrf_token %}
+                <button type="submit" class="primary-btn" style="background: linear-gradient(135deg, #f87171, #ef4444); color: #fff; box-shadow: 0 0 28px rgba(239, 68, 68, 0.4);">Xác nhận xóa</button>
+                <a href="{% url 'inventory:material_list' %}" class="secondary-btn">Hủy bỏ</a>
+            </form>
+        </div>
+    </main>
+</div>
+{% endblock %}

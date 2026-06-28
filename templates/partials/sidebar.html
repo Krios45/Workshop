@@ -3,9 +3,9 @@
     <nav class="side-nav">
         <a href="{% url 'dashboard:dashboard' %}">Dashboard</a>
         <a href="{% url 'assets:list' %}">Thiết bị</a>
-        <a href="{% url 'dashboard:inventory' %}">Vật tư</a>
+        <a href="{% url 'inventory:material_list' %}">Vật tư</a>
         <a href="{% url 'bookings:list' %}">Đặt lịch</a>
-        <a href="{% url 'dashboard:stock_transactions' %}">Nhập/Xuất kho</a>
+        <a href="{% url 'inventory:transaction_history' %}">Nhập/Xuất kho</a>
         <a href="{% url 'dashboard:analytics' %}">Thống kê</a>
         <a href="/admin/">Cài đặt</a>
     </nav>

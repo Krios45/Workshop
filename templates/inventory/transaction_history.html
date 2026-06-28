@@ -1,45 +1,59 @@
 {% extends 'base.html' %}
+{% block title %}Lịch sử nhập xuất kho | Mini Asset/WMS{% endblock %}
+{% block shell %}
+<div class="app-shell">
+    {% include 'partials/sidebar.html' %}
+    <main class="workspace">
+        {% include 'partials/topbar.html' %}
 
-{% block content %}
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Nhật Ký Lịch Sử Nhập / Xuất Kho</h2>
-        <a href="{% url 'inventory:material_list' %}" class="btn btn-secondary">Quay lại danh mục</a>
-    </div>
+        <section class="page-title reveal">
+            <p class="eyebrow">Stock Transaction</p>
+            <h1>Lịch sử nhập / xuất kho</h1>
+        </section>
 
-    <table class="table table-bordered table-striped">
-        <thead class="table-dark">
-            <tr>
-                <th>Thời Gian</th>
-                <th>Vật Tư</th>
-                <th>Loại Giao Dịch</th>
-                <th>Số Lượng</th>
-                <th>Người Thực Hiện</th>
-                <th>Ghi Chú / Lý Do</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for log in logs %}
-            <tr>
-                <td>{{ log.created_at|date:"d/m/Y H:i" }}</td>
-                <td><strong>{{ log.material.name }}</strong> (<code>{{ log.material.code }}</code>)</td>
-                <td>
-                    {% if log.transaction_type == 'import' %}
-                        <span class="badge bg-success">Nhập kho</span>
-                    {% else %}
-                        <span class="badge bg-danger">Xuất kho</span>
-                    {% endif %}
-                </td>
-                <td>{{ log.quantity }}</td>
-                <td>{{ log.user.username }}</td>
-                <td>{{ log.note|default:"-" }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="6" class="text-center">Chưa có lịch sử giao dịch nhập xuất nào.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+        <section class="panel glass reveal">
+            <div class="table-tools">
+                <a href="{% url 'inventory:material_list' %}" class="secondary-btn small" style="border-radius: 14px;">← Danh mục vật tư</a>
+                <a href="{% url 'inventory:create_transaction' %}" class="primary-btn small">+ Tạo phiếu mới</a>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Thời gian</th>
+                            <th>Vật tư</th>
+                            <th>Loại giao dịch</th>
+                            <th>Số lượng</th>
+                            <th>Người thực hiện</th>
+                            <th>Ghi chú</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for log in logs %}
+                        <tr>
+                            <td>{{ log.created_at|date:"d/m/Y H:i" }}</td>
+                            <td><strong>{{ log.material.name }}</strong> (<code>{{ log.material.code }}</code>)</td>
+                            <td>
+                                {% if log.transaction_type == 'import' %}
+                                    <span class="badge cyan">Nhập kho</span>
+                                {% else %}
+                                    <span class="badge orange">Xuất kho</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ log.quantity }}</td>
+                            <td>{{ log.user.username }}</td>
+                            <td>{{ log.note|default:"-" }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" style="text-align: center; color: var(--g500);">Chưa có lịch sử giao dịch nhập xuất nào.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
 </div>
 {% endblock %}
