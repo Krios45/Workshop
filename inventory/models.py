@@ -1,41 +1,30 @@
-from django.contrib.auth import get_user_model
 from django.db import models
-
-User = get_user_model()
-
+from django.contrib.auth.models import User 
 
 class Material(models.Model):
-	name = models.CharField(max_length=150)
-	sku = models.CharField(max_length=50, unique=True)
-	unit = models.CharField(max_length=20, default='unit')
-	quantity_on_hand = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-	reorder_level = models.DecimalField(max_digits=12, decimal_places=2, default=0)
-	description = models.TextField(blank=True)
-	created_at = models.DateTimeField(auto_now_add=True)
-	updated_at = models.DateTimeField(auto_now=True)
+    code = models.CharField(max_length=50, unique=True, verbose_name="Mã vật tư") # [cite: 308]
+    name = models.CharField(max_length=100, verbose_name="Tên vật tư") # [cite: 308]
+    unit = models.CharField(max_length=20, verbose_name="Đơn vị tính") # [cite: 308]
+    quantity = models.IntegerField(default=0, verbose_name="Số lượng tồn") # [cite: 308]
+    min_quantity = models.IntegerField(default=5, verbose_name="Mức tồn tối thiểu") # [cite: 308]
+    location = models.CharField(max_length=100, blank=True, null=True, verbose_name="Vị trí lưu kho") # [cite: 165, 308]
+    note = models.TextField(blank=True, null=True, verbose_name="Ghi chú") # [cite: 165, 308]
 
-	def __str__(self) -> str:
-		return f"{self.sku} - {self.name}"
-
+    def __str__(self):
+        return f"{self.name} ({self.code})"
 
 class StockTransaction(models.Model):
-	TYPE_IN = 'in'
-	TYPE_OUT = 'out'
-	TYPE_ADJUST = 'adjust'
+    TRANSACTION_TYPES = [
+        ('import', 'Nhập kho'), 
+        ('export', 'Xuất kho'), 
+    ]
+    
+    material = models.ForeignKey(Material, on_delete=models.CASCADE, related_name='transactions', verbose_name="Vật tư") 
+    transaction_type = models.CharField(max_length=10, choices=TRANSACTION_TYPES, verbose_name="Loại giao dịch") 
+    quantity = models.IntegerField(verbose_name="Số lượng thay đổi") 
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Người thực hiện") 
+    note = models.TextField(blank=True, null=True, verbose_name="Ghi chú") # [cite: 311]
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Ngày thực hiện") 
 
-	TYPE_CHOICES = [
-		(TYPE_IN, 'In'),
-		(TYPE_OUT, 'Out'),
-		(TYPE_ADJUST, 'Adjust'),
-	]
-
-	material = models.ForeignKey(Material, on_delete=models.PROTECT, related_name='transactions')
-	transaction_type = models.CharField(max_length=10, choices=TYPE_CHOICES)
-	quantity = models.DecimalField(max_digits=12, decimal_places=2)
-	reference = models.CharField(max_length=100, blank=True)
-	note = models.TextField(blank=True)
-	created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
-	created_at = models.DateTimeField(auto_now_add=True)
-
-	def __str__(self) -> str:
-		return f"{self.material.sku} - {self.transaction_type}"
+    def __str__(self):
+        return f"{self.get_transaction_type_display()} - {self.material.name} ({self.quantity})"
