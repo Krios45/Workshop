@@ -131,3 +131,71 @@ def booking_cancel(request, pk):
     else:
         messages.error(request, "Bạn không có quyền hủy lịch đặt này.")
     return redirect('bookings:list')
+
+
+@login_required
+def booking_edit(request, pk):
+    booking = get_object_or_404(Booking, pk=pk)
+
+    # Only owner or manager can edit, and only when pending
+    if booking.user != request.user and not is_manager_or_admin(request.user):
+        messages.error(request, "Bạn không có quyền chỉnh sửa lịch đặt này.")
+        return redirect('bookings:list')
+
+    if booking.status != Booking.STATUS_PENDING:
+        messages.error(request, "Chỉ có thể chỉnh sửa lịch đặt đang chờ duyệt.")
+        return redirect('bookings:list')
+
+    if request.method == 'POST':
+        form = BookingForm(request.POST, instance=booking)
+        if form.is_valid():
+            updated = form.save(commit=False)
+            start_time = updated.start_time
+            end_time = updated.end_time
+
+            # Check overlap with APPROVED bookings for this asset (exclude self)
+            overlap = Booking.objects.filter(
+                asset=booking.asset,
+                status=Booking.STATUS_APPROVED,
+                start_time__lt=end_time,
+                end_time__gt=start_time,
+            ).exclude(pk=booking.pk)
+
+            if overlap.exists():
+                form.add_error(None, "Thiết bị này đã có lịch được phê duyệt trong khoảng thời gian đã chọn.")
+            else:
+                updated.save()
+                messages.success(request, "Đã cập nhật lịch đặt thành công.")
+                return redirect('bookings:list')
+    else:
+        form = BookingForm(instance=booking)
+
+    context = {
+        'form': form,
+        'booking': booking,
+        'asset': booking.asset,
+        'is_edit': True,
+    }
+    return render(request, 'bookings/edit.html', context)
+
+
+@login_required
+def booking_delete(request, pk):
+    booking = get_object_or_404(Booking, pk=pk)
+
+    # Only owner or manager can delete, and only when pending
+    if booking.user != request.user and not is_manager_or_admin(request.user):
+        messages.error(request, "Bạn không có quyền xóa lịch đặt này.")
+        return redirect('bookings:list')
+
+    if booking.status != Booking.STATUS_PENDING:
+        messages.error(request, "Chỉ có thể xóa lịch đặt đang chờ duyệt.")
+        return redirect('bookings:list')
+
+    if request.method == 'POST':
+        asset_name = booking.asset.name
+        booking.delete()
+        messages.success(request, f"Đã xóa lịch đặt thiết bị {asset_name} thành công.")
+        return redirect('bookings:list')
+
+    return render(request, 'bookings/delete_confirm.html', {'booking': booking})

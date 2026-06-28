@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Chỉnh sửa lịch đặt | Mini Asset/WMS{% endblock %}
+{% block shell %}
+<div class="app-shell">
+    {% include 'partials/sidebar.html' %}
+    <main class="workspace">
+        {% include 'partials/topbar.html' %}
+
+        <section class="page-title reveal">
+            <p class="eyebrow">Booking Manager</p>
+            <h1>Chỉnh sửa lịch đặt</h1>
+        </section>
+
+        {% if form.non_field_errors %}
+            <div class="toast error" style="margin-top: 14px;">
+                ⚠ {{ form.non_field_errors.as_text }}
+            </div>
+        {% endif %}
+
+        <div class="panel glass reveal" style="margin-top: 18px; padding: 28px;">
+
+            <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 1px solid var(--line);">
+                <div style="width: 46px; height: 46px; border-radius: 14px; background: linear-gradient(135deg, rgba(0,229,255,.2), rgba(59,130,246,.2)); border: 1px solid rgba(0,229,255,.3); display: grid; place-items: center; font-size: 20px;">✏️</div>
+                <div>
+                    <h3 style="margin: 0; color: var(--cyan);">{{ asset.name }}</h3>
+                    <p style="margin: 3px 0 0; color: var(--g500); font-size: 13px;">Mã: <code>{{ asset.code }}</code> &nbsp;|&nbsp; Vị trí: {{ asset.location|default:"-" }}</p>
+                </div>
+                <span class="badge orange" style="margin-left: auto;">Chờ duyệt</span>
+            </div>
+
+            <form class="form-card" method="post" style="grid-template-columns: 1fr 1fr; gap: 18px;">
+                {% csrf_token %}
+
+                <label>
+                    Thời gian bắt đầu
+                    {{ form.start_time }}
+                    {% if form.start_time.errors %}
+                        <span style="font-size: 12px; color: #fca5a5; margin-top: 4px; display: block;">{{ form.start_time.errors.0 }}</span>
+                    {% endif %}
+                </label>
+
+                <label>
+                    Thời gian kết thúc
+                    {{ form.end_time }}
+                    {% if form.end_time.errors %}
+                        <span style="font-size: 12px; color: #fca5a5; margin-top: 4px; display: block;">{{ form.end_time.errors.0 }}</span>
+                    {% endif %}
+                </label>
+
+                <label class="full">
+                    Mục đích sử dụng
+                    {{ form.purpose }}
+                    {% if form.purpose.errors %}
+                        <span style="font-size: 12px; color: #fca5a5; margin-top: 4px; display: block;">{{ form.purpose.errors.0 }}</span>
+                    {% endif %}
+                </label>
+
+                <div class="full" style="display: flex; gap: 12px; margin-top: 8px;">
+                    <button type="submit" class="primary-btn">💾 Lưu thay đổi</button>
+                    <a href="{% url 'bookings:list' %}" class="secondary-btn">Hủy bỏ</a>
+                </div>
+            </form>
+        </div>
+    </main>
+</div>
+{% endblock %}
