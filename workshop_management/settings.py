@@ -142,7 +142,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://workshop-1-46kn.onrender.com",
+    "https://workshop-management-f0r7.onrender.com",
 ]
 
 LOGIN_REDIRECT_URL = 'dashboard:home'
