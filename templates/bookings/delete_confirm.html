@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Xác nhận xóa lịch đặt | Mini Asset/WMS{% endblock %}
+{% block shell %}
+<div class="app-shell">
+    {% include 'partials/sidebar.html' %}
+    <main class="workspace">
+        {% include 'partials/topbar.html' %}
+
+        <section class="page-title reveal">
+            <p class="eyebrow">Booking Manager</p>
+            <h1>Xác nhận xóa lịch đặt</h1>
+        </section>
+
+        <div class="panel glass reveal" style="margin-top: 18px; padding: 32px; max-width: 560px;">
+
+            <div style="text-align: center; margin-bottom: 28px;">
+                <div style="width: 64px; height: 64px; border-radius: 20px; background: rgba(248,113,113,.15); border: 1px solid rgba(248,113,113,.35); display: grid; place-items: center; font-size: 28px; margin: 0 auto 16px;">🗑️</div>
+                <h2 style="font-family: Poppins; margin: 0 0 8px; color: #fca5a5;">Xóa lịch đặt?</h2>
+                <p style="color: var(--g300); line-height: 1.7; margin: 0;">Hành động này không thể hoàn tác. Lịch đặt sẽ bị xóa vĩnh viễn khỏi hệ thống.</p>
+            </div>
+
+            <div style="background: rgba(255,255,255,.04); border: 1px solid var(--line); border-radius: 18px; padding: 18px; margin-bottom: 24px; display: grid; gap: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: var(--g500); font-size: 13px;">Thiết bị</span>
+                    <span style="color: var(--white); font-weight: 600;">{{ booking.asset.name }} <code style="color: var(--cyan); font-size: 12px;">({{ booking.asset.code }})</code></span>
+                </div>
+                <div style="height: 1px; background: var(--line);"></div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: var(--g500); font-size: 13px;">Người đặt</span>
+                    <span style="color: var(--white);">{{ booking.user.username }}</span>
+                </div>
+                <div style="height: 1px; background: var(--line);"></div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: var(--g500); font-size: 13px;">Thời gian bắt đầu</span>
+                    <span style="color: var(--white);">{{ booking.start_time|date:"d/m/Y H:i" }}</span>
+                </div>
+                <div style="height: 1px; background: var(--line);"></div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: var(--g500); font-size: 13px;">Thời gian kết thúc</span>
+                    <span style="color: var(--white);">{{ booking.end_time|date:"d/m/Y H:i" }}</span>
+                </div>
+                {% if booking.purpose %}
+                <div style="height: 1px; background: var(--line);"></div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px;">
+                    <span style="color: var(--g500); font-size: 13px; white-space: nowrap;">Mục đích</span>
+                    <span style="color: var(--g300); text-align: right;">{{ booking.purpose }}</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <form method="post" style="display: flex; gap: 12px;">
+                {% csrf_token %}
+                <button type="submit" class="primary-btn" style="flex: 1; background: linear-gradient(135deg, #ef4444, #dc2626); box-shadow: 0 0 24px rgba(239,68,68,.3);">
+                    🗑️ Xác nhận xóa
+                </button>
+                <a href="{% url 'bookings:list' %}" class="secondary-btn" style="flex: 1; text-align: center;">
+                    Hủy bỏ
+                </a>
+            </form>
+        </div>
+    </main>
+</div>
+{% endblock %}
