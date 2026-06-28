@@ -62,3 +62,52 @@ def stock_transactions(request):
 def analytics(request):
     return render(request, 'analytics.html')
 
+
+from django.http import JsonResponse
+from django.db import connection
+from django.db.migrations.recorder import MigrationRecorder
+
+@login_required
+def diagnose(request):
+    # Only allow superusers to access diagnostics
+    if not request.user.is_superuser:
+        return JsonResponse({'error': 'Unauthorized'}, status=403)
+        
+    db_engine = connection.vendor
+    
+    # Check assets
+    try:
+        from assets.models import Asset, AssetCategory
+        asset_count = Asset.objects.count()
+        category_count = AssetCategory.objects.count()
+        assets_list = list(Asset.objects.values('code', 'name', 'status')[:10])
+    except Exception as e:
+        asset_count = f"Error: {str(e)}"
+        category_count = f"Error: {str(e)}"
+        assets_list = []
+
+    # Check materials
+    try:
+        from inventory.models import Material
+        material_count = Material.objects.count()
+        materials_list = list(Material.objects.values('name')[:10])
+    except Exception as e:
+        material_count = f"Error: {str(e)}"
+        materials_list = []
+
+    # Check migrations
+    try:
+        applied_migrations = list(MigrationRecorder.Migration.objects.values('app', 'name', 'applied'))
+    except Exception as e:
+        applied_migrations = f"Error: {str(e)}"
+
+    return JsonResponse({
+        'database_engine': db_engine,
+        'asset_count': asset_count,
+        'category_count': category_count,
+        'assets_sample': assets_list,
+        'material_count': material_count,
+        'materials_sample': materials_list,
+        'applied_migrations': applied_migrations,
+    })
+
