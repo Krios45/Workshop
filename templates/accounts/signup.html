@@ -150,6 +150,23 @@
     color: transparent;
 }
 
+html[data-theme="light"] .signup-card {
+    background: linear-gradient(145deg, rgba(255,255,255,.98), rgba(248,250,252,.92));
+    border-color: rgba(15,23,42,.12);
+    box-shadow: 0 22px 60px rgba(15,23,42,.14);
+}
+
+html[data-theme="light"] .signup-header h1 {
+    background: linear-gradient(120deg, #0f172a, #0e7490 48%, #2563eb);
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+html[data-theme="light"] .signup-header .muted,
+html[data-theme="light"] .signup-footer {
+    color: #475569;
+}
+
 .signup-form {
     display: grid;
     gap: 14px;
@@ -200,10 +217,34 @@
     transition: border-color .2s, box-shadow .2s;
 }
 
+html[data-theme="light"] .field-label {
+    color: #334155;
+}
+
+html[data-theme="light"] .field-icon {
+    color: #64748b;
+}
+
+html[data-theme="light"] .field-wrap input {
+    background: #ffffff;
+    color: #0f172a;
+    border-color: rgba(15, 23, 42, .16);
+}
+
+html[data-theme="light"] .field-wrap input::placeholder {
+    color: #94a3b8;
+}
+
 .field-wrap input:focus {
     border-color: rgba(0,229,255,.5);
     box-shadow: 0 0 0 3px rgba(0,229,255,.1);
     background: rgba(0, 229, 255, .04);
+}
+
+html[data-theme="light"] .field-wrap input:focus {
+    border-color: rgba(8,145,178,.48);
+    box-shadow: 0 0 0 3px rgba(8,145,178,.12);
+    background: #ffffff;
 }
 
 .field-error {

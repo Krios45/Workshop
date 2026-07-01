@@ -8,6 +8,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <script>
+        (function () {
+            try {
+                document.documentElement.dataset.theme = localStorage.getItem('assetwms-theme') || 'dark';
+            } catch (error) {
+                document.documentElement.dataset.theme = 'dark';
+            }
+        })();
+    </script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
 </head>
@@ -29,6 +38,7 @@
             <a href="{% url 'dashboard:analytics' %}">Thống kê</a>
         </nav>
         <div class="header-actions">
+            <button type="button" class="ghost-btn theme-toggle" data-theme-toggle aria-label="Chuyển giao diện">Sáng</button>
             {% if user.is_authenticated %}
                 <a class="ghost-btn" href="{% url 'accounts:profile' %}">Hồ sơ</a>
                 <form class="nav-inline" action="{% url 'accounts:logout' %}" method="post">
